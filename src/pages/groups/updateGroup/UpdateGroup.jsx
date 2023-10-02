@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_ENDPOINT } from "../../../config";
+import DOMPurify from "dompurify";
 
 function CreateGroup() {
   const history = useNavigate();
@@ -40,9 +41,9 @@ function CreateGroup() {
     e.preventDefault();
 
     const data = {
-      groupName: groupName,
-      category: category,
-      description: description,
+      groupName: DOMPurify.sanitize(groupName),
+      category: DOMPurify.sanitize(category),
+      description: DOMPurify.sanitize(description),
     };
 
     //update the item

@@ -11,6 +11,7 @@ import Footer from "../../components/Navbar/Footer";
 import LoadingMod from "./loadingModal";
 import cover from "../../images/post.png";
 import { API_ENDPOINT } from "../../config";
+import DOMPurify from "dompurify";
 
 function EditPost() {
   const myRefname = useRef(null);
@@ -130,7 +131,7 @@ function EditPost() {
     });
     console.log("newImagesUrls", newImagesUrls);
     const newItem = {
-      contentText,
+      contentText : DOMPurify.sanitize(contentText),
       images: newImagesUrls,
     };
     console.log(newItem);

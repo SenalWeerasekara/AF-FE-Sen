@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { API_ENDPOINT } from '../../../config';
 import cover from "../../../images/questions/qq.png"
+import DOMPurify from "dompurify";
 
 function AddAnswerModal({ data }) {
   const userID = data.id 
@@ -10,6 +11,10 @@ function AddAnswerModal({ data }) {
   const [answer, setAnswer] = useState("")
   const [group, setGroup] = useState("")
   const [error, setError] = useState("")
+
+  const isValidInput = (input) => {
+    return /^[a-zA-Z0-9!@#$%^&*()\-_=+[{\]}|;:'",./?\s]*$/.test(input);
+  };
 
   function validation(){
     if (!answer) {
@@ -24,7 +29,7 @@ function AddAnswerModal({ data }) {
     const array = {
         answerPersonID : answerPersonID,  
         answerPersonName : answerPersonName,
-        answer: answer,
+        answer: DOMPurify.sanitize(answer),
     }
     const dataProps = {
     id: userID,
@@ -62,10 +67,13 @@ function AddAnswerModal({ data }) {
             }}
           />
           {error && (<h1 className='text-red-500'>{error}</h1>) }
+          {isValidInput(answer) || !answer ? null : (
+           <h1 className="text-red-500"> Invalid Input Characters Detected! </h1>
+          )}
         </div> 
         <div className="flex justify-end px-4 pb-4">
           <button onClick={()=> data.setAnswerModal(false)} className="px-4 py-2 rounded-md mr-2 text-white bg-gray-400 hover:bg-gray-500 focus:outline-none focus:bg-gray-600">Go back</button>
-          <button onClick={validation} className="px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:bg-blue-700">Add Answer</button>
+          <button disabled={!isValidInput(answer)} onClick={validation} className="px-4 py-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:bg-blue-700">Add Answer</button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { uploadFile } from "../../../firebase";
 import { useNavigate } from "react-router-dom";
 import GetCurrentUser from "../../../hooks/getCurrentUser";
 import { API_ENDPOINT } from "../../../config";
+import DOMPurify from "dompurify";
 
 function CreateGroup() {
   const file_input_ref = useRef(null);
@@ -54,9 +55,9 @@ function CreateGroup() {
       try {
         uploadFile(file).then((res) => {
           const newGroup = {
-            groupName,
-            category,
-            description,
+            groupName : DOMPurify.sanitize(groupName),
+            category : DOMPurify.sanitize(category),
+            description : DOMPurify.sanitize(description),
             groupIcon: res,
             adminId: currentUser._id,
           };

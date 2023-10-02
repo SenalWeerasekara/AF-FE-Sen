@@ -13,6 +13,7 @@ import cover from "../../images/post.png";
 import LoadingMod from "./loadingModal";
 import GetCurrentUser from "../../hooks/getCurrentUser";
 import { API_ENDPOINT } from "../../config";
+import DOMPurify from "dompurify";
 
 function CreatePost() {
   const [contentText, setContentText] = useState("");
@@ -83,7 +84,7 @@ function CreatePost() {
     const newItem = {
       userId,
       groupId: groupId || "",
-      contentText,
+      contentText : DOMPurify.sanitize(contentText),
       images: fileDetails,
       likes: {},
       comments: [],

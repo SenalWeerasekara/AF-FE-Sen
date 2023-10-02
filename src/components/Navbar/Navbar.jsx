@@ -61,6 +61,12 @@ const ResponsiveAppBar = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const decodedToken = jwt_decode(currentUser);
+    // check for expiration and ask to re loggin
+    if (decodedToken.exp < Date.now() / 1000) {
+      alert("Please Login Again!");
+      navigate('/login');
+    }
     dispatch(
       userActions.replaceUser({ currentUser: jwt_decode(currentUser).data })
     );
